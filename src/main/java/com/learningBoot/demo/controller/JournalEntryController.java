@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +41,15 @@ public class JournalEntryController {
     }
 
     @PostMapping("/get-entry")
-    public Optional<JournalEntry> getEntry(@RequestBody int id){
+    public ResponseEntity<Optional<JournalEntry>> getEntry(@RequestBody int id){
         System.out.println("my Id is::::"+id);
-        return journalEntryService.findEntry(id);
+        try{
+
+            return new ResponseEntity<>(journalEntryService.findEntry(id),HttpStatus.ACCEPTED) ;
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
 
@@ -50,8 +59,11 @@ public class JournalEntryController {
         journalEntryService.saveEntry(myEntry);
     }
     @PutMapping("/update-entry")
-    public boolean updateEntry(@RequestBody JournalEntry p){
-        return journalEntryService.updateEntry(p.getId(), p.getEmail());
+    public ResponseEntity<?> updateEntry(@RequestBody JournalEntry p){
+        boolean st=journalEntryService.updateEntry(p.getId(), p.getEmail());
+        if(st)
+        return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
         // return true if my entry is succesfully updated or false when my entry is not succesfully updated
     }
     @DeleteMapping("/delete-entry")
