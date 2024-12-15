@@ -28,19 +28,18 @@ public class JournalEntryService {
     }
 
     public boolean deleteEntry(int id) {
-        if(journalEntryRepository.findById(id).empty()==Optional.empty()){
+        if(!journalEntryRepository.findById(id).isPresent()){
             return false;
         }
         journalEntryRepository.deleteById(id);
         return true;
     }
     public boolean updateEntry(int id,String email){
-        if(journalEntryRepository.findById(id).empty()==Optional.empty()){
-            return false;
-        }
+        
         Optional<JournalEntry> temp=journalEntryRepository.findById(id);
+        if(!temp.isPresent())return false;
         temp.get().setEmail(email);
-        journalEntryRepository.insert(temp.get());
+        journalEntryRepository.save(temp.get());
         return true;
         
     }

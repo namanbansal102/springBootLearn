@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +22,9 @@ import com.learningBoot.demo.service.JournalEntryService;
 @RequestMapping("/journal")
 
 public class JournalEntryController {
-    private interface upInterface {
-    int id
-    String email 
+    public interface upInterface {
+    int id=-1;
+    String email="";
     }
     @Autowired
     private JournalEntryService journalEntryService;
@@ -49,9 +50,13 @@ public class JournalEntryController {
         journalEntryService.saveEntry(myEntry);
     }
     @PutMapping("/update-entry")
-    public boolean updateEntry(@RequestBody upInterface p){
-        return journalEntryService.updateEntry(p.id, p.email);
+    public boolean updateEntry(@RequestBody JournalEntry p){
+        return journalEntryService.updateEntry(p.getId(), p.getEmail());
         // return true if my entry is succesfully updated or false when my entry is not succesfully updated
+    }
+    @DeleteMapping("/delete-entry")
+    public boolean deleteEntry(@RequestBody int id){
+        return journalEntryService.deleteEntry(id);// as delete my entrry if it is present by using isPresent in optional else unable to delete
     }
     
     
