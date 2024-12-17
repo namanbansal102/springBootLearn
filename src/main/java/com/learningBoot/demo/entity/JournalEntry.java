@@ -13,5 +13,4 @@ public class JournalEntry {
     private String name;
     private String article;
     private String email;
-   
 }
