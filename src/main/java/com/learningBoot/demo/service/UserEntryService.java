@@ -28,17 +28,18 @@ public class UserEntryService {
         return userEntryRepository.findAll();
     }
     public Optional<UserEntry> findByUserName(String uName){
-        return userEntryRepository.findbyUserName(uName);  
+        return userEntryRepository.findByuserName(uName);  
     }
     public boolean deleteEntry(String userName){
         Optional<UserEntry> uEntry=findByUserName(userName);
-        if (uEntry.isPresent())return false;
+        if (!uEntry.isPresent())return false;
         userEntryRepository.deleteById(uEntry.get().getUserId());
         return true;
     }
     public boolean updateEntry(String userName,String passwd){
         Optional<UserEntry> uEntry=findByUserName(userName);
-        if (uEntry.isPresent())return false;
+        System.out.println("My Password is::::"+uEntry.get().getPasswd());
+        if (!uEntry.isPresent())return false;
         uEntry.get().setPasswd(passwd);
         userEntryRepository.save(uEntry.get());// for saving my userEntry 
         return true;

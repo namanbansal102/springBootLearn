@@ -8,6 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.learningBoot.demo.entity.UserEntry;
 
 public interface UserEntryRepository  extends MongoRepository<UserEntry,ObjectId>{
-    Optional<UserEntry> findbyUserName(String userName);
+    Optional<UserEntry> findByuserName(String userName);
     
 }

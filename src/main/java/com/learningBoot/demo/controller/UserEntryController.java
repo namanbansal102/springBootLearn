@@ -50,9 +50,9 @@ public class UserEntryController {
         }
 
     @DeleteMapping("/delete-user")
-    public ResponseEntity<Boolean> deleteUser(String uName){
+    public ResponseEntity<Boolean> deleteUser(@RequestBody String uName){
         try{
-            boolean is=userEntryService.updateEntry(u.getUserName(), u.getPasswd());
+            boolean is=userEntryService.deleteEntry(uName);
             if(is){
                 return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
             }

@@ -37,6 +37,7 @@ public class JournalEntryService {
     public boolean updateEntry(int id,String email){
         
         Optional<JournalEntry> temp=journalEntryRepository.findById(id);
+        
         if(!temp.isPresent())return false;
         temp.get().setEmail(email);
         journalEntryRepository.save(temp.get());
