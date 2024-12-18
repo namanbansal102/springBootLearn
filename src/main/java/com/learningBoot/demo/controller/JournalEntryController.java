@@ -9,6 +9,7 @@ import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,11 +83,13 @@ public class JournalEntryController {
         return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
         // return true if my entry is succesfully updated or false when my entry is not succesfully updated
     }
+    @Transactional
     @DeleteMapping("/delete-entry/{userName}")
     public ResponseEntity<Boolean> deleteEntry(@PathVariable String userName,@RequestBody int id){
         JournalEntry jEntry=journalEntryService.deleteEntry(id);
-        boolean is=userEntryService.deleteJournalFromUser(userName, jEntry);
+        boolean is=userEntryService.deleteJournalFromUser(userName,null);
         if(is)return new ResponseEntity<>(HttpStatus.OK);
+        //throw new Exception("Error Getting Error ")
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }

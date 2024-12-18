@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class UserEntryController {
         System.out.println("user is Created");
         return userEntryService.createUser(userEntry);
     }
-
+    @Transactional
     @PutMapping("/update-user")
         public ResponseEntity<Boolean> updateUser(@RequestBody UserEntry u){
             try{
@@ -45,6 +46,7 @@ public class UserEntryController {
                 }
             }
             catch(Exception e){
+                
             }
             return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
         }
