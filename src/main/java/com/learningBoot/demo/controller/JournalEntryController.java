@@ -65,24 +65,27 @@ public class JournalEntryController {
         }
         int id=journalEntryService.saveEntry(myEntry);
         // saving my entry in my user Proile
-        uEntry.get().setLst(new ArrayList<>(id));
+       uEntry.get().getLst().add(myEntry);
+        System.out.println("My UEntry lst is::::"+uEntry.get().getLst());
         boolean is=userEntryService.createUser(uEntry.get());
         if (is) {
             return  new ResponseEntity<>(true,HttpStatus.OK);
         }
         return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
-    }
-    @PutMapping("/update-entry")
-    public ResponseEntity<?> updateEntry(@RequestBody JournalEntry p){
-        boolean st=journalEntryService.updateEntry(p.getId(), p.getEmail());
-        if(st)
-        return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
+     }
+    @PutMapping("/update-entry/{userName}")
+    public ResponseEntity<?> updateEntry(@PathVariable String userName,@RequestBody JournalEntry p){
+        boolean st=journalEntryService.updateEntry(p.getId(), p.getArticle());
+        if(st){
+            return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
+        }
         return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
         // return true if my entry is succesfully updated or false when my entry is not succesfully updated
     }
     @DeleteMapping("/delete-entry")
     public boolean deleteEntry(@RequestBody int id){
-        return journalEntryService.deleteEntry(id);// as delete my entrry if it is present by using isPresent in optional else unable to delete
+        JournalEntry jEntry=journalEntryService.deleteEntry(id);
+        ;// as delete my entrry if it is present by using isPresent in optional else unable to delete
     }
     
     

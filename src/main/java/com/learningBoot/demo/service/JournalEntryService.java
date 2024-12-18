@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.learningBoot.demo.entity.JournalEntry;
+import com.learningBoot.demo.entity.UserEntry;
 import com.learningBoot.demo.repository.JournalEntryRepository;
 
 @Component
@@ -14,32 +15,35 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
-    public void saveEntry(JournalEntry journalEntry) {
+    public int saveEntry(JournalEntry journalEntry) {
         journalEntryRepository.save(journalEntry);
+        return journalEntry.getId();
     }
 
     public List<JournalEntry> getEntries() {
         return journalEntryRepository.findAll();
     }
 
+
     public Optional<JournalEntry> findEntry(int id) {
         System.out.println("Is Found that " + journalEntryRepository.findById(6));
         return journalEntryRepository.findById(id);
     }
 
-    public boolean deleteEntry(int id) {
+    public JournalEntry deleteEntry(int id) {
         if(!journalEntryRepository.findById(id).isPresent()){
-            return false;
+            return null;
         }
+        JournalEntry jEntry=journalEntryRepository.findById(id).get();
         journalEntryRepository.deleteById(id);
-        return true;
+        return jEntry;
     }
-    public boolean updateEntry(int id,String email){
+    public boolean updateEntry(int id,String content){
         
         Optional<JournalEntry> temp=journalEntryRepository.findById(id);
         
         if(!temp.isPresent())return false;
-        temp.get().setEmail(email);
+        temp.get().setArticle(content);
         journalEntryRepository.save(temp.get());
         return true;
         

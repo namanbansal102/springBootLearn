@@ -30,11 +30,10 @@ public class UserEntryService {
     public Optional<UserEntry> findByUserName(String uName){
         return userEntryRepository.findByuserName(uName);  
     }
-    public boolean deleteEntry(String userName){
+    public Optional<UserEntry> deleteEntry(String userName){
         Optional<UserEntry> uEntry=findByUserName(userName);
-        if (!uEntry.isPresent())return false;
         userEntryRepository.deleteById(uEntry.get().getUserId());
-        return true;
+        return uEntry;
     }
     public boolean updateEntry(String userName,String passwd){
         Optional<UserEntry> uEntry=findByUserName(userName);
