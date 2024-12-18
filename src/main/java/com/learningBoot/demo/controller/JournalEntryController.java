@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.learningBoot.demo.entity.JournalEntry;
+import com.learningBoot.demo.entity.UserEntry;
 import com.learningBoot.demo.service.JournalEntryService;
+import com.learningBoot.demo.service.UserEntryService;
 
 @RestController
 @RequestMapping("/journal")
@@ -35,28 +37,40 @@ public class JournalEntryController {
     private int id=0;
     public HashMap<Integer,JournalEntry> map=new HashMap<>();
 
-    @GetMapping("/get-entry")
-    public List<JournalEntry> getAllEntries(){
-        return journalEntryService.getEntries();
+    @Autowired
+    UserEntryService userEntryService;
+    @GetMapping("/get-entry/{userName}")
+    public ResponseEntity<Optional<List<JournalEntry>>> getAllEntries(@PathVariable String userName){
+       Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
+       if (uEntry.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       }
+      List<JournalEntry> lst=uEntry.get().getLst();
+       System.out.println("my List is :::"+lst);
+       if (lst.size()==0) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       }
+       
+        return new ResponseEntity<>(Optional.of(lst),HttpStatus.OK);
     }
 
-    @PostMapping("/get-entry")
-    public ResponseEntity<Optional<JournalEntry>> getEntry(@RequestBody int id){
-        System.out.println("my Id is::::"+id);
-        try{
+  
 
-            return new ResponseEntity<>(journalEntryService.findEntry(id),HttpStatus.ACCEPTED) ;
+
+    @PostMapping("/set-entry/{userName}")
+    public ResponseEntity<Boolean> createEntry(@PathVariable String userName,@RequestBody JournalEntry myEntry){
+        Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
+        if (uEntry.isEmpty()) {
+             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        int id=journalEntryService.saveEntry(myEntry);
+        // saving my entry in my user Proile
+        uEntry.get().setLst(new ArrayList<>(id));
+        boolean is=userEntryService.createUser(uEntry.get());
+        if (is) {
+            return  new ResponseEntity<>(true,HttpStatus.OK);
         }
-    }
-
-
-
-    @PostMapping("/set-entry/{myid}")
-    public void createEntry(@PathVariable int myid,@RequestBody JournalEntry myEntry){
-        journalEntryService.saveEntry(myEntry);
+        return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
     }
     @PutMapping("/update-entry")
     public ResponseEntity<?> updateEntry(@RequestBody JournalEntry p){
