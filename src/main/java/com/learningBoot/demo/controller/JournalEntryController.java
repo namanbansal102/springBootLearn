@@ -82,10 +82,13 @@ public class JournalEntryController {
         return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
         // return true if my entry is succesfully updated or false when my entry is not succesfully updated
     }
-    @DeleteMapping("/delete-entry")
-    public boolean deleteEntry(@RequestBody int id){
+    @DeleteMapping("/delete-entry/{userName}")
+    public ResponseEntity<Boolean> deleteEntry(@PathVariable String userName,@RequestBody int id){
         JournalEntry jEntry=journalEntryService.deleteEntry(id);
-        ;// as delete my entrry if it is present by using isPresent in optional else unable to delete
+        boolean is=userEntryService.deleteJournalFromUser(userName, jEntry);
+        if(is)return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
     }
     
     
