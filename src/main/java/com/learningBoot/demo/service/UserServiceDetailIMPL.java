@@ -18,16 +18,18 @@ public class UserServiceDetailIMPL implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException{
-        Optional<UserEntry> user=userEntryRepository.findByuserName(userName);
-        System.out.println("My UserEntry Found in This Security is::::"+user);
-        if (user!=null) {
-           UserDetails userDetails= org.springframework.security.core.userdetails.User.builder()
-           .username(user.get().getUserName())
-           .password(user.get().getPasswd())
-           .roles(user.get().getRoles().toArray(new String[0])).build();
-           return userDetails;
-        }
-        throw new UsernameNotFoundException("User Not Found in DataBase"+userName);
+   
+            Optional<UserEntry> user=userEntryRepository.findByuserName(userName);
+            if (user.isPresent()) {
+                UserDetails userDetails= org.springframework.security.core.userdetails.User.builder()
+                .username(user.get().getUserName())
+                .password(user.get().getPasswd())
+                .roles(user.get().getRoles().toArray(new String[0])).build();
+                System.out.println("My UserEntry Found in This Security is::::"+userDetails);
+                return userDetails;
+            }
+            throw new UsernameNotFoundException("User Not Found in DataBase"+userName);
+        
         
     }
 }
