@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,35 +25,18 @@ import com.learningBoot.demo.service.UserEntryService;
 public class UserEntryController {
     @Autowired
     UserEntryService userEntryService;
-
     @GetMapping("/list-users")
     public List<UserEntry> listUsers(){
         return userEntryService.listAllUsers();
     }
-    @PostMapping("/create-user")
-    public ResponseEntity<Boolean> createUser(@RequestBody UserEntry userEntry){
-        System.out.println("user is Created");
-        boolean isCreated=userEntryService.createUser(userEntry);
-        try{
-
-            if (isCreated) {
-                return new ResponseEntity<>(true,HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
-        }
-    }
-    catch(Exception e){
-        System.out.println("Exception is:::"+e);
-        return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
-    }
-        
-    }
+   
     @Transactional
     @PutMapping("/update-user")
         public ResponseEntity<Boolean> updateUser(@RequestBody UserEntry u){
             try{
-                boolean is=userEntryService.updateEntry(u.getUserName(), u.getPasswd());
+                Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+                String userName=authentication.getName();
+                boolean is=userEntryService.updateEntry(userName, u.getPasswd());
                 if(is){
                     return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
                 }

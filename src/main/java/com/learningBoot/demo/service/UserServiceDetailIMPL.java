@@ -19,6 +19,7 @@ public class UserServiceDetailIMPL implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException{
         Optional<UserEntry> user=userEntryRepository.findByuserName(userName);
+        System.out.println("My UserEntry Found in This Security is::::"+user);
         if (user!=null) {
            UserDetails userDetails= org.springframework.security.core.userdetails.User.builder()
            .username(user.get().getUserName())
