@@ -5,8 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -36,7 +39,9 @@ public class UserEntryService {
         return userEntryRepository.findAll();
     }
     public Optional<UserEntry> findByUserName(String uName){
-        return userEntryRepository.findByuserName(uName);  
+
+        
+        return userEntryRepository.findByuserName(uName); 
     }
     public boolean deleteEntry(String userName){
         Optional<UserEntry> uEntry=findByUserName(userName);
@@ -49,12 +54,19 @@ public class UserEntryService {
         }
     }
     public boolean updateEntry(String userName,String passwd){
-        Optional<UserEntry> uEntry=findByUserName(userName);
-        System.out.println("My Password is::::"+uEntry.get().getPasswd());
-        if (!uEntry.isPresent())return false;
-        uEntry.get().setPasswd(passwd);
-        userEntryRepository.save(uEntry.get());// for saving my userEntry 
-        return true;
+        try{
+
+            Optional<UserEntry> uEntry=userEntryRepository.findByuserName(userName);
+            System.out.println("My Password is::::"+uEntry.get().getPasswd());
+            if (!uEntry.isPresent())return false;
+            uEntry.get().setPasswd(passwordEncoder.encode(passwd));
+           userEntryRepository.save(uEntry.get());// for saving my userEntry 
+            return true;
+        }
+        catch(Exception e){ 
+            System.out.println("Exception is:::"+e);
+            return false;
+        }
     }
     public boolean deleteJournalFromUser(String userName,JournalEntry jEntry){
         try{

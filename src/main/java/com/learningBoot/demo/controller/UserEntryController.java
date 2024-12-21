@@ -30,12 +30,12 @@ public class UserEntryController {
         return userEntryService.listAllUsers();
     }
    
-    @Transactional
     @PutMapping("/update-user")
         public ResponseEntity<Boolean> updateUser(@RequestBody UserEntry u){
             try{
                 Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
                 String userName=authentication.getName();
+                System.out.println("My UserName iss::::"+userName);
                 boolean is=userEntryService.updateEntry(userName, u.getPasswd());
                 if(is){
                     return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
