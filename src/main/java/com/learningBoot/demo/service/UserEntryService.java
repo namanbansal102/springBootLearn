@@ -1,11 +1,14 @@
 package com.learningBoot.demo.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.learningBoot.demo.entity.JournalEntry;
@@ -14,11 +17,14 @@ import com.learningBoot.demo.repository.UserEntryRepository;
 
 @Component
 public class UserEntryService {
+    private static final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
     @Autowired
     private UserEntryRepository userEntryRepository;
     public boolean createUser(UserEntry userEntry){
         try{
-
+            System.out.println("Running createUser Function");
+            userEntry.setPasswd(passwordEncoder.encode(userEntry.getPasswd()));
+            userEntry.setRoles(Arrays.asList("USER"));
             userEntryRepository.save(userEntry);
             return true;
         }

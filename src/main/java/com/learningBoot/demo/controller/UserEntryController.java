@@ -29,9 +29,23 @@ public class UserEntryController {
         return userEntryService.listAllUsers();
     }
     @PostMapping("/create-user")
-    public boolean createUser(@RequestBody UserEntry userEntry){
+    public ResponseEntity<Boolean> createUser(@RequestBody UserEntry userEntry){
         System.out.println("user is Created");
-        return userEntryService.createUser(userEntry);
+        boolean isCreated=userEntryService.createUser(userEntry);
+        try{
+
+            if (isCreated) {
+                return new ResponseEntity<>(true,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+    }
+    catch(Exception e){
+        System.out.println("Exception is:::"+e);
+        return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
+    }
+        
     }
     @Transactional
     @PutMapping("/update-user")
