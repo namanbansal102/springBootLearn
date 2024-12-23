@@ -25,11 +25,6 @@ import com.learningBoot.demo.service.UserEntryService;
 public class UserEntryController {
     @Autowired
     UserEntryService userEntryService;
-    @GetMapping("/list-users")
-    public List<UserEntry> listUsers(){
-        return userEntryService.listAllUsers();
-    }
-   
     @PutMapping("/update-user")
         public ResponseEntity<Boolean> updateUser(@RequestBody UserEntry u){
             try{
