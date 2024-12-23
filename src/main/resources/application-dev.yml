@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: demo
+    data:
+      mongodb:
+        host: localhost
+        port: 27017
+        database: journaldb
+
+server:
+  port: 8081
+  main:
+    allow-circular-references: true
+
+
+
+
+
+
+
+
