@@ -1,5 +1,7 @@
 package com.learningBoot.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,14 @@ import com.learningBoot.demo.service.UserEntryService;
 @RestController
 @RequestMapping("/public")
 public class PublicController {
+    Logger logger=LoggerFactory.getLogger(PublicController.class);
     @Autowired
     UserEntryService userEntryService;
 
      @PostMapping("/create-user")
     public ResponseEntity<Boolean> createUser(@RequestBody UserEntry userEntry){
         System.out.println("user is Created");
+     
         boolean isCreated=userEntryService.createUser(userEntry);
         try{
 

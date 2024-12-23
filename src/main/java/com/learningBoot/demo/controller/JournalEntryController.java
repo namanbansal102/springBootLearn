@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.apache.catalina.connector.Response;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +31,13 @@ import com.learningBoot.demo.repository.UserEntryRepository;
 import com.learningBoot.demo.service.JournalEntryService;
 import com.learningBoot.demo.service.UserEntryService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/journal")
-
+@Slf4j
 public class JournalEntryController {
+    private  static final org.slf4j.Logger logger=LoggerFactory.getLogger(JournalEntryController.class);
     public interface upInterface {
     int id=-1;
     String email="";
@@ -51,6 +56,9 @@ public class JournalEntryController {
     getAllEntries(){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String userName=authentication.getName();
+        log.info("Getting User {}", userName);
+        // getting my log info using slf4j info
+        logger.info("My User Name {} ",userName);
         System.out.println("Getting UserName"+userName);
        Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
        if (uEntry.isEmpty()) {
