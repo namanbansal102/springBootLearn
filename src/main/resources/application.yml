@@ -5,6 +5,12 @@ spring:
     active: dev
 
 
+# printing only for error else not to print anthing in console
+# logging:
+#   level:
+#     root: TRACE
+
+
 
 
 
