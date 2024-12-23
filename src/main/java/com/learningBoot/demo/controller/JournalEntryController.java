@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,10 +44,10 @@ public class JournalEntryController {
     @Autowired
     UserEntryService userEntryService;
     @GetMapping("/get-entry")
-    public ResponseEntity<Optional<List<JournalEntry>>> getAllEntries(){
+    public ResponseEntity<Optional<List<JournalEntry>>> 
+    getAllEntries(){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String userName=authentication.getName();
-        System.out.println("My UserName is:::::::"+userName);
        Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
        if (uEntry.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -66,7 +67,7 @@ public class JournalEntryController {
     @PostMapping("/set-entry")
     public ResponseEntity<Boolean> createEntry(@RequestBody JournalEntry myEntry){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
-        String userName=authentication.getName();   
+        String userName=authentication.getName();
         Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
         if (uEntry.isEmpty()) {
              return new ResponseEntity<>(HttpStatus.NO_CONTENT);

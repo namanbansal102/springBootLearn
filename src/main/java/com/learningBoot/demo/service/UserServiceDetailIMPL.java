@@ -15,6 +15,7 @@ import com.learningBoot.demo.repository.UserEntryRepository;
 public class UserServiceDetailIMPL implements UserDetailsService {
     @Autowired
     private UserEntryRepository userEntryRepository;
+    private UserEntryService userEntryService;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException{
