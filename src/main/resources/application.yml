@@ -8,7 +8,19 @@ spring:
 # printing only for error else not to print anthing in console
 # logging:
 #   level:
-#     root: TRACE
+#     root: OFF
+
+
+# setting custom logging levels 
+logging:
+  level:
+    com:
+      learningBoot:
+        demo:
+          service:
+            UserEntryService: DEBUG
+          controller:
+            AdminController: ERROR
 
 
 
