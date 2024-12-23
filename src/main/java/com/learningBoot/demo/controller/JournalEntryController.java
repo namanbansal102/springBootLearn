@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.learningBoot.demo.entity.JournalEntry;
 import com.learningBoot.demo.entity.UserEntry;
+import com.learningBoot.demo.repository.JournalEntryRepository;
+import com.learningBoot.demo.repository.UserEntryRepository;
 import com.learningBoot.demo.service.JournalEntryService;
 import com.learningBoot.demo.service.UserEntryService;
 
@@ -37,7 +39,8 @@ public class JournalEntryController {
     }
     @Autowired
     private JournalEntryService journalEntryService;
-
+    @Autowired
+    private UserEntryRepository userEntryRepository;
     private int id=0;
     public HashMap<Integer,JournalEntry> map=new HashMap<>();
 
@@ -48,6 +51,7 @@ public class JournalEntryController {
     getAllEntries(){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String userName=authentication.getName();
+        System.out.println("Getting UserName"+userName);
        Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
        if (uEntry.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -76,11 +80,15 @@ public class JournalEntryController {
         // saving my entry in my user Proile
        uEntry.get().getLst().add(myEntry);
         System.out.println("My UEntry lst is::::"+uEntry.get().getLst());
-        boolean is=userEntryService.createUser(uEntry.get());
-        if (is) {
+        try{
+            System.out.println("My UserEntryRepository is::::0"+userEntryRepository);
+            userEntryRepository.save(uEntry.get());
             return  new ResponseEntity<>(true,HttpStatus.OK);
         }
-        return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
+        catch(Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
+        }
      }
     @PutMapping("/update-entry/{userName}")
     public ResponseEntity<?> updateEntry(@PathVariable String userName,@RequestBody JournalEntry p){
