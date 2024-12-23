@@ -27,7 +27,8 @@ public class SpringSecurityConfig {
         System.out.println("Running SEcuirty Filter Chain Configuration");
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/public/**").permitAll() // Allow public access
+                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")// Allow public access
                 .anyRequest().authenticated() // Authenticate other requests
             )
             .csrf().disable()
