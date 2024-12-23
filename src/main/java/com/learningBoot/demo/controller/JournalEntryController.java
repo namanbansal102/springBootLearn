@@ -90,8 +90,10 @@ public class JournalEntryController {
             return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
         }
      }
-    @PutMapping("/update-entry/{userName}")
-    public ResponseEntity<?> updateEntry(@PathVariable String userName,@RequestBody JournalEntry p){
+    @PutMapping("/update-entry")
+    public ResponseEntity<?> updateEntry(@RequestBody JournalEntry p){
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String userName=authentication.getName();
         boolean st=journalEntryService.updateEntry(p.getId(), p.getArticle());
         if(st){
             return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
