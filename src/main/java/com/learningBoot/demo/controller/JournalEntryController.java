@@ -59,13 +59,12 @@ public class JournalEntryController {
         log.info("Getting User {}", userName);
         // getting my log info using slf4j info
         logger.info("My User Name {} ",userName);
-        System.out.println("Getting UserName"+userName);
        Optional<UserEntry> uEntry= userEntryService.findByUserName(userName);
        if (uEntry.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-       }
+       }         
       List<JournalEntry> lst=uEntry.get().getLst();
-       System.out.println("my List is :::"+lst);
+      // System.out.println("my List is :::"+lst);
        if (lst.size()==0) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
        }
