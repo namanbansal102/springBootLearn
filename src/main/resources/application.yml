@@ -11,7 +11,7 @@ spring:
 #     root: OFF
 
 
-# setting custom logging levels 
+#setting custom logging levels 
 logging:
   level:
     com:
@@ -19,8 +19,11 @@ logging:
         demo:
           service:
             UserEntryService: DEBUG
+            JournalEntryService: INFO
           controller:
-            AdminController: ERROR
+            JournalEntryController: ERROR
+          
+            
 
 
 
