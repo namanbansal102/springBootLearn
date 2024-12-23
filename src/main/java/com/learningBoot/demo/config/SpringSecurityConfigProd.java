@@ -17,8 +17,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import com.learningBoot.demo.service.UserServiceDetailIMPL;
 
 @Configuration
-@Profile("dev")
-public class SpringSecurityConfig {
+@Profile("prod")
+public class SpringSecurityConfigProd {
 
     @Autowired
     private UserServiceDetailIMPL userSIMPL;
@@ -29,7 +29,7 @@ public class SpringSecurityConfig {
         System.out.println("Running SEcuirty Filter Chain Configuration");
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/public/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")// Allow public access
                 .anyRequest().authenticated() // Authenticate other requests
             )

@@ -8,7 +8,7 @@ spring:
         database: journaldb
 
 server:
-  port: 8081
+  port: 8080
   main:
     allow-circular-references: true
 
